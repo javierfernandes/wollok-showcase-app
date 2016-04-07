@@ -1,0 +1,58 @@
+<div>
+	<a ui-sref="reports" class="pull-right btn btn-primary btn-outline btn-rounded">Reports</a>
+	<h2>Wollok ShowCase <small>Full of code examples for wollok</small></h2>
+	<div class="jumbotron">
+
+		<div ng-show="!selectedComponent">
+		<div class="container">
+			<h1>Welcome!</h1>
+			<p>
+			This site is intented to showcase the Wollok Programming Language with code examples.
+			As there are several versions of wollok here you will find a list of branches to choose from.
+			</p>
+			<br /><br />
+			<p>
+				<a class="btn btn-primary btn-lg btn-outline btn-rounded">Learn more</a>
+			</p>
+		</div>
+		</div>
+
+		<div ng-show="selectedComponent">
+			<div class="row">
+			<div class="col-md-4">
+			  <div class="files-list-container"data-ng-show="files">
+			  	  <h2>{{selectedComponent.title}}</h2>
+			  	  <p>{{selectedComponent.description}}</p>
+
+			  	  <div class="list-group">
+				  	<a data-ng-repeat="file in files" data-ng-click="loadFile(file)" class="list-group-item" data-ng-class="{ 'active' : selectedFile == file }">
+				  		<h4 class="list-group-item-heading">{{ file.name }}</h4>
+    					<p class="list-group-item-text">{{ file.title }}</p>
+				  	</a>
+				  </div>
+
+				  <nav>
+				    <ul class="pagination">
+				      <li ng-class="{'disabled' : isFirstPage() }"><a ng-click="previousPage()" aria-label="Previous"><span aria-hidden="true">&laquo;</span></a></li>
+				      
+				      <li ng-class="{'active': currentPageNumber == page }" data-ng-repeat="page in [] | range:filePages.length"><a data-ng-click="setPage(page)">{{page}} <span ng-show="currentPageNumber == page"class="sr-only">(current)</span></a></li>
+
+				      <li ng-class="{'disabled' : isLastPage() }"><a aria-label="Next" data-ng-click="nextPage()"><span aria-hidden="true">&raquo;</span></a></li>
+				    </ul>
+				  </nav>
+			  </div>
+			  <h1 data-ng-hide="!files || files.length">No files !</h1>
+			</div>
+			<div class="col-md-8">
+				<div 
+					ui-ace="{ mode: 'wollok', theme: 'eclipse' }"
+					ng-model="currentFileContent"
+					readonly="true">
+			  	</div>
+			</div>
+		</div>
+		</div>
+
+	</div>
+
+</div>
