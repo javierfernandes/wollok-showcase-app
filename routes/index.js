@@ -9,8 +9,8 @@ var glob = require("multi-glob").glob;
 var config = {
 	"github" : {
 	  "repoOwner" : 'uqbar-project',
-	  "clientID": 'YOURS_HERE',
-      "clientSecret": 'YOURS_HERE',
+	  "clientID": '556755fe2e344b015c45',
+      "clientSecret": '63e9fa480395e9d401b24822202b891373cc25c6',
       "callbackURL": 'http://localhost:3000/api/auth/github/callback'
     },
     "localRepo" : '/Users/jfernandes/dev/data/repo/wollok-dev/wollok-showcase-content/src'

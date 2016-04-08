@@ -7,7 +7,7 @@ var argv = require('yargs').argv;
 var $ = require('gulp-load-plugins')();
 
 gulp.task('styles', function() {
-  return gulp.src('app/styles/main.less')
+  return gulp.src('public/styles/main.less')
     .pipe($.plumber())
     .pipe($.less())
     .pipe($.autoprefixer({browsers: ['last 1 version']}))
@@ -15,14 +15,14 @@ gulp.task('styles', function() {
 });
 
 gulp.task('jshint', function() {
-  return gulp.src('app/scripts/**/*.js')
+  return gulp.src('public/scripts/**/*.js')
     .pipe($.jshint())
     //.pipe($.jshint.reporter('jshint-stylish'))
     //.pipe($.jshint.reporter('fail'));
 });
 
 gulp.task('jscs', function() {
-  return gulp.src('app/scripts/**/*.js')
+  return gulp.src('public/scripts/**/*.js')
     .pipe($.jscs());
 });
 
@@ -32,9 +32,9 @@ gulp.task('html', ['styles'], function() {
     .pipe($.csso)
     .pipe($.replace, 'bower_components/bootstrap/fonts', 'fonts');
 
-  var assets = $.useref.assets({searchPath: '{.tmp,app}'});
+  var assets = $.useref.assets({searchPath: '{.tmp,public}'});
 
-  return gulp.src('app/**/*.html')
+  return gulp.src('public/**/*.html')
     .pipe(assets)
     .pipe($.if('*.js', $.ngAnnotate()))
     .pipe($.if('*.js', $.uglify()))
@@ -46,7 +46,7 @@ gulp.task('html', ['styles'], function() {
 });
 
 gulp.task('images', function() {
-  return gulp.src('app/images/**/*')
+  return gulp.src('public/images/**/*')
     // .pipe($.cache($.imagemin({
     //   progressive: true,
     //   interlaced: true
@@ -55,8 +55,8 @@ gulp.task('images', function() {
 });
 
 gulp.task('fonts', function() {
-  return gulp.src(require('main-bower-files')().concat('app/fonts/**/*')
-    .concat('bower_components/bootstrap/fonts/*'))
+  return gulp.src(require('main-bower-files')().concat('public/fonts/**/*')
+    .concat('public/scripts/lib/bootstrap/fonts/*'))
     .pipe($.filter('**/*.{eot,svg,ttf,woff,woff2}'))
     .pipe($.flatten())
     .pipe(gulp.dest('dist/fonts'))
@@ -65,8 +65,8 @@ gulp.task('fonts', function() {
 
 gulp.task('extras', function() {
   return gulp.src([
-    'app/*.*',
-    '!app/*.html',
+    'public/*.*',
+    '!public/*.html',
     'node_modules/apache-server-configs/dist/.htaccess'
   ], {
     dot: true
@@ -84,8 +84,8 @@ gulp.task('connect', ['styles'], function() {
     .use(serveStatic('app'))
     // paths to bower_components should be relative to the current file
     // e.g. in app/index.html you should use ../bower_components
-    .use('/bower_components', serveStatic('bower_components'))
-    .use(serveIndex('app'));
+    //.use('/bower_components', serveStatic('bower_components'))
+    .use(serveIndex('public'));
 
   require('http').createServer(app)
     .listen(9000)
@@ -118,13 +118,13 @@ gulp.task('wiredep', function() {
     'angular-scenario'
   ];
 
-  gulp.src('app/styles/*.less')
+  gulp.src('public/styles/*.less')
     .pipe(wiredep())
-    .pipe(gulp.dest('app/styles'));
+    .pipe(gulp.dest('public/styles'));
 
-  gulp.src('app/*.html')
+  gulp.src('public/*.html')
     .pipe(wiredep({exclude: exclude}))
-    .pipe(gulp.dest('app'));
+    .pipe(gulp.dest('public'));
 
   gulp.src('test/*.js')
     .pipe(wiredep({exclude: exclude, devDependencies: true}))
@@ -136,13 +136,13 @@ gulp.task('watch', ['connect'], function() {
 
   // watch for changes
   gulp.watch([
-    'app/**/*.html',
+    'public/**/*.html',
     '.tmp/styles/**/*.css',
-    'app/scripts/**/*.js',
-    'app/images/**/*'
+    'public/scripts/**/*.js',
+    'public/images/**/*'
   ]).on('change', $.livereload.changed);
 
-  gulp.watch('app/styles/**/*.less', ['styles']);
+  gulp.watch('public/styles/**/*.less', ['styles']);
   gulp.watch('bower.json', ['wiredep']);
 });
 
@@ -156,7 +156,7 @@ gulp.task('build', ['clean'], function() {
 });
 
 gulp.task('docs', [], function() {
-  return gulp.src('app/scripts/**/**')
+  return gulp.src('public/scripts/**/**')
     .pipe($.ngdocs.process())
     .pipe(gulp.dest('./docs'));
 });

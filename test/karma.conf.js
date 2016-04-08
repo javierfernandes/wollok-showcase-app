@@ -15,12 +15,12 @@ module.exports = function(config) {
     // list of files / patterns to load in the browser
     files: [
       // bower:js
-      '../bower_components/angular/angular.js',
-      '../bower_components/angular-mocks/angular-mocks.js',
-      '../bower_components/ui-router/release/angular-ui-router.js',
-      '../bower_components/angular-animate/angular-animate.js',
-      '../bower_components/angular-ui-ace/ui-ace.js',
-      '../bower_components/angular-loading-bar/build/loading-bar.js',
+      '../public/scripts/lib/angular/angular.js',
+      '../public/scripts/lib/angular-mocks/angular-mocks.js',
+      '../public/scripts/lib/ui-router/release/angular-ui-router.js',
+      '../public/scripts/lib/angular-animate/angular-animate.js',
+      '../public/scripts/lib/angular-ui-ace/ui-ace.js',
+      '../public/scripts/lib/angular-loading-bar/build/loading-bar.js',
       // endbower
       '../app/scripts/**/*.js',
       //'../test/mock/**/*.js',
