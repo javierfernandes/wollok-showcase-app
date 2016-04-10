@@ -30,7 +30,7 @@ gulp.task('html', ['styles'], function() {
   var lazypipe = require('lazypipe');
   var cssChannel = lazypipe()
     .pipe($.csso)
-    .pipe($.replace, 'bower_components/bootstrap/fonts', 'fonts');
+    .pipe($.replace, 'public/scripts/lib/bootstrap/fonts', 'fonts');
 
   var assets = $.useref.assets({searchPath: '{.tmp,public}'});
 
