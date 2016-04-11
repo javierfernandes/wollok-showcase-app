@@ -1,7 +1,7 @@
 <div>
 	<a ui-sref="reports" class="pull-right btn btn-primary btn-outline btn-rounded">Reports</a>
 	<h2>Wollok ShowCase <small>Full of code examples for wollok</small></h2>
-	<div class="jumbotron">
+	<div class="jumbotron main-content">
 
 		<div ng-show="!selectedComponent">
 		<div class="container">
@@ -46,28 +46,45 @@
 			</div>
 			<!-- right-side: example selected -->
 			<div class="col-md-8">
-				<div>
-					<h3 ng-show="selectedFile">{{selectedFile.name}}</h3>
-					<h3 ng-hide="selectedFile">&lt; Select an Example</h3>
-					<p ng-show="selectedFile">
-						Neque porro quisquam est qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit...
-						No hay nadie que ame el dolor mismo, que lo busque, lo encuentre y lo quiera, simplemente porque es el dolor.
-					</p>
-				</div>
-				<div class="list-group example-files-list">
-				  <a href="#" class="list-group-item active">
-				    File0.wlk
-				  </a>
-				  <a href="#" class="list-group-item">File1.wlk</a>
-				  <a href="#" class="list-group-item">File2.wlk</a>
-				  <a href="#" class="list-group-item">File3.wlk</a>
-				  <a href="#" class="list-group-item">File4.wlk</a>
-				</div>
 
-				<div 
-					ui-ace="{ mode: 'wollok', theme: 'eclipse' }"
-					ng-model="currentFileContent"
-					readonly="true">
+				<div class="row">
+					<div class="col-md-12">
+						<h3 ng-show="selectedFile">{{selectedFile.name}}</h3>
+						<h3 ng-hide="selectedFile"><span class="glyphicon glyphicon-triangle-left"/> Select an Example</h3>
+						<p ng-show="selectedFile">
+							This examples combines mixins to form a stackable trait pattern. Etc
+							etc.
+						</p>
+					</div>
+				</div>
+				<div class="row">				
+					<div class="col-md-10 working-with-code">
+						<div 
+							ui-ace="{ mode: 'wollok', theme: 'eclipse' }"
+							ng-model="currentFileContent"
+							readonly="true">
+					  	</div>
+					</div>
+					<div class="col-md-2">
+						<div class="list-group example-files-list">
+						  <a href="#" class="list-group-item active">File0.wlk</a>
+						  <a href="#" class="list-group-item">File1.wlk</a>
+						  <a href="#" class="list-group-item">File2.wlk</a>
+						  <a href="#" class="list-group-item">File3.wlk</a>
+						  <a href="#" class="list-group-item">File4.wlk</a>
+						</div>
+					  	<div class="btn-group-vertical" role="group" aria-label="..." style="bottom: 0; right:0">
+						  <button type="button" class="btn btn-primary"><span class="glyphicon glyphicon-play"/></button>
+						</div>
+				  	</div>
+			  	</div>
+
+			  	<div class="row">
+				  	<div id="output-console" class="col-md-10">
+				  		Output:
+				  		<textarea>
+				  		</textarea>
+				  	</div>
 			  	</div>
 			</div>
 		</div>
