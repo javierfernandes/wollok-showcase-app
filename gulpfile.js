@@ -141,7 +141,7 @@ gulp.task('wiredep', function() {
 });
 
 gulp.task('build', function(done) {
-  runSequence(['clean', 'jshint', 'jscs', 'html', 'styles'], function() {
+  runSequence(['clean', 'jshint', /*'jscs',*/ 'html', 'styles'], function() {
     done();
   });
 })
