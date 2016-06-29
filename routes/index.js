@@ -1,10 +1,8 @@
 var express = require('express')
 var router = express.Router()
-var GitHubApi = require('github')
 var path = require('path')
 var fs = require('fs');
 var glob = require("multi-glob").glob;
-var Git = require("nodegit");
 var request = require('request');
 
 // var config = JSON.parse(fs.readFileSync(__dirname + '/../config.json', 'utf8'));
