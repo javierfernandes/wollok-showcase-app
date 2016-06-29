@@ -48,6 +48,25 @@ gulp.task('fetch-examples', function(done) {
   });
 })
 
+// lint / compile
+
+var config = {
+  src : ['public/scripts/*.js', 'public/scripts/controllers/**/*.js']
+}
+
+gulp.task('jshint', function() {
+  return gulp.src(config.src)
+      .pipe($.jshint())
+      // TODO: see how to fail only on errors and not warning
+      // .pipe($.jshint.reporter('jshint-stylish'))
+      // .pipe($.jshint.reporter('failOnError'));
+});
+
+gulp.task('jscs', function() {
+  return gulp.src(config.src)
+      .pipe($.jscs());
+});
+
 // build
 
 gulp.task('styles', function() {
@@ -58,25 +77,13 @@ gulp.task('styles', function() {
     .pipe(gulp.dest('.tmp/styles'));
 });
 
-gulp.task('jshint', function() {
-  return gulp.src('public/scripts/**/*.js')
-    .pipe($.jshint())
-    //.pipe($.jshint.reporter('jshint-stylish'))
-    //.pipe($.jshint.reporter('fail'));
-});
-
-gulp.task('jscs', function() {
-  return gulp.src('public/scripts/**/*.js')
-    .pipe($.jscs());
-});
-
-gulp.task('html', ['styles'], function() {
+gulp.task('html', function() {
   var lazypipe = require('lazypipe');
   var cssChannel = lazypipe()
     .pipe($.csso)
     .pipe($.replace, 'public/scripts/lib/bootstrap/fonts', 'fonts');
 
-  var assets = $.useref.assets({searchPath: '{.tmp,public}'});
+  var assets = $.useref.assets({searchPath: '{.tmp, public}'});
 
   return gulp.src('public/**/*.html')
     .pipe(assets)
@@ -86,62 +93,20 @@ gulp.task('html', ['styles'], function() {
     .pipe(assets.restore())
     .pipe($.useref())
     .pipe($.if('*.html', $.minifyHtml({conditionals: true, loose: true})))
-    .pipe(gulp.dest('dist'));
+    .pipe(gulp.dest('.tmp/'));
 });
 
-gulp.task('images', function() {
-  return gulp.src('public/images/**/*')
-    // .pipe($.cache($.imagemin({
-    //   progressive: true,
-    //   interlaced: true
-    // })))
-    .pipe(gulp.dest('dist/images'));
-});
+// gulp.task('fonts', function() {
+//   return gulp.src(require('main-bower-files')().concat('public/fonts/**/*')
+//     .concat('public/scripts/lib/bootstrap/fonts/*'))
+//     .pipe($.filter('**/*.{eot,svg,ttf,woff,woff2}'))
+//     .pipe($.flatten())
+//     .pipe(gulp.dest('.tmp/fonts'));
+// });
 
-gulp.task('fonts', function() {
-  return gulp.src(require('main-bower-files')().concat('public/fonts/**/*')
-    .concat('public/scripts/lib/bootstrap/fonts/*'))
-    .pipe($.filter('**/*.{eot,svg,ttf,woff,woff2}'))
-    .pipe($.flatten())
-    .pipe(gulp.dest('dist/fonts'))
-    .pipe(gulp.dest('.tmp/fonts'));
-});
-
-gulp.task('extras', function() {
-  return gulp.src([
-    'public/*.*',
-    '!public/*.html',
-    'node_modules/apache-server-configs/dist/.htaccess'
-  ], {
-    dot: true
-  }).pipe(gulp.dest('dist'));
-});
-
-gulp.task('clean', require('del').bind(null, ['.tmp', 'dist']));
-
-gulp.task('connect', ['styles'], function() {
-  var serveStatic = require('serve-static');
-  var serveIndex = require('serve-index');
-  var app = require('connect')()
-    .use(require('connect-livereload')({port: 35729}))
-    .use(serveStatic('.tmp'))
-    .use(serveStatic('app'))
-    // paths to bower_components should be relative to the current file
-    // e.g. in app/index.html you should use ../bower_components
-    //.use('/bower_components', serveStatic('bower_components'))
-    .use(serveIndex('public'));
-
-  require('http').createServer(app)
-    .listen(9000)
-    .on('listening', function() {
-      console.log('Started connect web server on http://localhost:9000');
-    });
-});
-
-gulp.task('serve', ['wiredep', 'connect', 'fonts', 'watch'], function() {
-  if (argv.open) {
-    require('opn')('http://localhost:9000');
-  }
+gulp.task('clean', function() {
+  return gulp.src('.tmp/', {read: false})
+      .pipe(clean());
 });
 
 gulp.task('test', function(done) {
@@ -175,32 +140,8 @@ gulp.task('wiredep', function() {
     .pipe(gulp.dest('test'));
 });
 
-gulp.task('watch', ['connect'], function() {
-  $.livereload.listen();
-
-  // watch for changes
-  gulp.watch([
-    'public/**/*.html',
-    '.tmp/styles/**/*.css',
-    'public/scripts/**/*.js',
-    'public/images/**/*'
-  ]).on('change', $.livereload.changed);
-
-  gulp.watch('public/styles/**/*.less', ['styles']);
-  gulp.watch('bower.json', ['wiredep']);
-});
-
-gulp.task('builddist', ['jshint', 'jscs', 'html', 'images', 'fonts', 'extras'],
-  function() {
-  return gulp.src('dist/**/*').pipe($.size({title: 'build', gzip: true}));
-});
-
-gulp.task('build', ['clean'], function() {
-  gulp.start('builddist');
-});
-
-gulp.task('docs', [], function() {
-  return gulp.src('public/scripts/**/**')
-    .pipe($.ngdocs.process())
-    .pipe(gulp.dest('./docs'));
-});
+gulp.task('build', function(done) {
+  runSequence(['clean', 'jshint', 'jscs', 'html', 'styles'], function() {
+    done();
+  });
+})
