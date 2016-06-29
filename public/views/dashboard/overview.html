@@ -1,7 +1,6 @@
 <div>
-	<a ui-sref="reports" class="pull-right btn btn-primary btn-outline btn-rounded">Reports</a>
 	<h2>Wollok ShowCase <small>Full of code examples for wollok</small></h2>
-	<div class="jumbotron">
+	<div class="jumbotron main-content">
 
 		<div ng-show="!selectedComponent">
 		<div class="container">
@@ -19,12 +18,13 @@
 
 		<div ng-show="selectedComponent">
 			<div class="row">
-			<div class="col-md-4">
-			  <div class="files-list-container"data-ng-show="files">
+			<!-- left-side: examples list (on a selected component) -->
+			<div id="component-details" class="col-md-4">
+			  <div class="files-list-container" data-ng-show="files">
 			  	  <h2>{{selectedComponent.title}}</h2>
 			  	  <p>{{selectedComponent.description}}</p>
 
-			  	  <div class="list-group">
+			  	  <div id="examples-list" class="list-group">
 				  	<a data-ng-repeat="file in files" data-ng-click="loadFile(file)" class="list-group-item" data-ng-class="{ 'active' : selectedFile == file }">
 				  		<h4 class="list-group-item-heading">{{ file.name }}</h4>
     					<p class="list-group-item-text">{{ file.title }}</p>
@@ -43,11 +43,50 @@
 			  </div>
 			  <h1 data-ng-hide="!files || files.length">No files !</h1>
 			</div>
+			<!-- right-side: example selected -->
 			<div class="col-md-8">
-				<div 
-					ui-ace="{ mode: 'wollok', theme: 'eclipse' }"
-					ng-model="currentFileContent"
-					readonly="true">
+
+				<div class="row">
+					<div class="col-md-12">
+						<h3 ng-show="selectedFile">{{selectedFile.name}}</h3>
+						<h3 ng-hide="selectedFile"><span class="glyphicon glyphicon-triangle-left"/> Select an Example</h3>
+						<p ng-show="selectedFile">
+							This examples combines mixins to form a stackable trait pattern. Etc
+							etc.
+						</p>
+					</div>
+				</div>
+				<div class="row">				
+					<div class="col-md-10 working-with-code">
+						<div 
+							ui-ace="{ mode: 'wollok', theme: 'eclipse' }"
+							ng-model="currentFileContent"
+							readonly="true">
+					  	</div>
+					</div>
+					<div class="col-md-2">
+						<div class="list-group example-files-list">
+						  <a href="#" class="list-group-item active">File0.wlk</a>
+						  <a href="#" class="list-group-item">File1.wlk</a>
+						  <a href="#" class="list-group-item">File2.wlk</a>
+						  <a href="#" class="list-group-item">File3.wlk</a>
+						  <a href="#" class="list-group-item">File4.wlk</a>
+						</div>
+					  	<div class="btn-group-vertical" role="group" aria-label="..." style="bottom: 0; right:0">
+						  <button ng-click="runFile()" type="button" class="btn btn-primary"><span class="glyphicon glyphicon-play"/></button>
+						</div>
+				  	</div>
+			  	</div>
+
+			  	<div class="row">
+				  	<div id="output-console" class="col-md-10">
+				  		Output:
+						<div
+								ui-ace="{ mode:'json', theme:'eclipse', useWrapMode: true, showLineNumbers:false, showGutter:false }"
+								ng-model="executionFeedBack"
+								readonly="true">
+						</div>
+				  	</div>
 			  	</div>
 			</div>
 		</div>

@@ -5,6 +5,37 @@ var gulp = require('gulp');
 var karma = require('karma').server;
 var argv = require('yargs').argv;
 var $ = require('gulp-load-plugins')();
+var git = require('gulp-git');
+var clean = require('gulp-clean');
+var runSequence = require('run-sequence');
+
+
+// get examples files from github
+
+gulp.task('clone-examples', function(cb) {
+  git.clone('https://github.com/uqbar-project/wollok.git', {args: __dirname + '/gulp-data'}, function(err) {
+      console.log("Finished cloning")
+      cb(err)
+  });
+});
+
+gulp.task('copy-examples', function() {
+  return gulp.src('gulp-data/wollok-tests/**')
+      .pipe(gulp.dest('data'))
+})
+
+gulp.task('clean-cloned-examples', function() {
+  return gulp.src('gulp-data', {read: false})
+      .pipe(clean());
+})
+
+gulp.task('fetch-examples', function(done) {
+  runSequence('clone-examples', 'copy-examples', 'clean-cloned-examples', function() {
+    done();
+  });
+})
+
+// build
 
 gulp.task('styles', function() {
   return gulp.src('public/styles/main.less')
@@ -30,7 +61,7 @@ gulp.task('html', ['styles'], function() {
   var lazypipe = require('lazypipe');
   var cssChannel = lazypipe()
     .pipe($.csso)
-    .pipe($.replace, 'bower_components/bootstrap/fonts', 'fonts');
+    .pipe($.replace, 'public/scripts/lib/bootstrap/fonts', 'fonts');
 
   var assets = $.useref.assets({searchPath: '{.tmp,public}'});
 

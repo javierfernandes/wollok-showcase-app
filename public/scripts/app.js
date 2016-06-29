@@ -49,16 +49,12 @@ angular
           templateUrl: 'views/dashboard.html',
           controller: 'DashboardCtrl'
         })
-          .state('overview', {
+        .state('overview', {
             url: '/overview',
             parent: 'dashboard',
             templateUrl: 'views/dashboard/overview.html'
-          })
-          .state('reports', {
-            url: '/reports',
-            parent: 'dashboard',
-            templateUrl: 'views/dashboard/reports.html'
-          });
+        })
+
 
   });
 

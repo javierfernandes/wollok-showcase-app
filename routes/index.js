@@ -3,43 +3,25 @@ var router = express.Router()
 var GitHubApi = require('github')
 var path = require('path')
 var fs = require('fs');
-//var glob = require('glob'); 
 var glob = require("multi-glob").glob;
+var Git = require("nodegit");
+var request = require('request');
 
-var config = {
-	"github" : {
-	  "repoOwner" : 'uqbar-project',
-	  "clientID": '556755fe2e344b015c45',
-      "clientSecret": '63e9fa480395e9d401b24822202b891373cc25c6',
-      "callbackURL": 'http://localhost:3000/api/auth/github/callback'
-    },
-    "localRepo" : '/Users/jfernandes/dev/data/repo/wollok-dev/wollok-showcase-content/src'
-};
+// var config = JSON.parse(fs.readFileSync(__dirname + '/../config.json', 'utf8'));
 
-// connect github api client
-var github = new GitHubApi({
-    // required
-    "version": '3.0.0',
-    // optional
-    "debug": true,
-    "headers": {
-        'user-agent': 'Wollok-Showcase'
-    }
-});
-console.log('Authenticating Github API...')
-github.authenticate({
-    "type": 'oauth',
-    "key": config.github.clientID,
-    "secret": config.github.clientSecret
-});
-console.log('Github API authenticated!')
-
+function localRepoPath() {
+	return __dirname + '/../data'
+}
 
 // MIDDLEWARES
-
+//  info.showcase format
+//  {
+//	   id: '',
+//	   title : ''
+//   }
 
 router.get('/api/components', function(req, res, next) {
-	glob(config.localRepo + '/**/info.showcase', function(err, files) {
+	glob(localRepoPath() + '/**/info.showcase', function(err, files) {
 	  var components = files.map(function(f) {
 	  	return JSON.parse(fs.readFileSync(f, "utf8"))
 	  })
@@ -48,7 +30,7 @@ router.get('/api/components', function(req, res, next) {
 });
 
 router.get('/api/components/:componentId', function(req, res, next) {
-	glob(config.localRepo + '/**/info.showcase', function(err, files) {
+	glob(localRepoPath() + '/**/info.showcase', function(err, files) {
 	  console.log("Reading all components  from files: " + files.length);
 	  var found = files.filter(function(f) {
 	  	var component = JSON.parse(fs.readFileSync(f, "utf8"))
@@ -77,7 +59,7 @@ router.get('/api/components/:componentId', function(req, res, next) {
 // FILES
  
 router.get('/api/files', function(req, res, next) {
-	glob(config.localRepo + '/**/*.wlk', function(err, files) {
+	glob(localRepoPath() + '/**/*.wlk', function(err, files) {
 	  var filesAsJSON = files.map(function(f) {
 	  	return {
 	  		name: path.basename(f),
@@ -96,64 +78,25 @@ router.get('/api/file/:id', function(req, res, next) {
 	});
 })
 
+router.get('/api/file/run/:id', function(req, res, next) {
+	var fileName = req.params.id
+	fs.readFile(fileName, 'utf8', function (err,data) {
+		request({
+			uri: 'http://server.wollok.org:8080/run',
+			method: 'POST',
+			preambleCRLF: true,
+			postambleCRLF: true,
+			body: data
+		},
+		function (error, response, body) {
+			res.status(response.statusCode).send(body)
+		}
+		);
+	});
+})
 
-
-
-
-
-
-
-
-// TAGS / BRANCHES
-
-router.get('/api/tags', function(req, res, next) {
-    var msg = {
-        user : config.github.repoOwner,
-        repo : 'wollok'
-    }
-    github.repos.getTags(msg, function(err, data) {
-        if (err) return res.status(500).json({ error: err });
-        res.json(data)
-    });
-});
-
-router.get('/api/branches', function(req, res, next) {
-    var msg = {
-        user : config.github.repoOwner,
-        repo : 'wollok'
-    };
-    github.repos.getBranches(msg, function(err, data) {
-        if (err) return res.status(500).json({ error: err });
-        res.json(data)
-    });
-});
-
-router.get('/api/branch/:id', function(req, res, next) {
-    var msg = {
-        user : config.github.repoOwner,
-        repo : 'wollok',
-        branch: req.params.id
-    }
-    github.repos.getBranch(msg, function(err, data) {
-        if (err) return res.status(500).json({ error: err })
-
-		var branchTree = data.commit.commit.tree
-
-		github.gitdata.getTree({
-			user : config.github.repoOwner,
-	        repo : 'wollok',
-	        branch: req.params.id,
-	        sha: branchTree.sha
-		}, function(err, data) {
-			res.json(data)
-		})
-    });
-});
-
-
-/* GET home page. */
 router.get('/', function(req, res, next) {
-  res.render('index', { title: 'Express' });
+  res.render('index', { title: 'Wollok ShowCase' });
 });
 
 
