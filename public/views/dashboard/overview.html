@@ -1,5 +1,4 @@
 <div>
-	<a ui-sref="reports" class="pull-right btn btn-primary btn-outline btn-rounded">Reports</a>
 	<h2>Wollok ShowCase <small>Full of code examples for wollok</small></h2>
 	<div class="jumbotron main-content">
 
@@ -74,7 +73,7 @@
 						  <a href="#" class="list-group-item">File4.wlk</a>
 						</div>
 					  	<div class="btn-group-vertical" role="group" aria-label="..." style="bottom: 0; right:0">
-						  <button type="button" class="btn btn-primary"><span class="glyphicon glyphicon-play"/></button>
+						  <button ng-click="runFile()" type="button" class="btn btn-primary"><span class="glyphicon glyphicon-play"/></button>
 						</div>
 				  	</div>
 			  	</div>
@@ -82,8 +81,11 @@
 			  	<div class="row">
 				  	<div id="output-console" class="col-md-10">
 				  		Output:
-				  		<textarea>
-				  		</textarea>
+						<div
+								ui-ace="{ mode:'json', theme:'eclipse', useWrapMode: true, showLineNumbers:false, showGutter:false }"
+								ng-model="executionFeedBack"
+								readonly="true">
+						</div>
 				  	</div>
 			  	</div>
 			</div>

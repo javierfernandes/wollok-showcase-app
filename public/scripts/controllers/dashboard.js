@@ -69,6 +69,18 @@ angular.module('yapp')
       });
     };
 
+    $scope.runFile = function() {
+        console.log("Running file !")
+        $http.get('/api/file/run/' + $scope.selectedFile.fqn)
+            .then(function(response) {
+                console.log("Got response: " + response)
+                $scope.executionFeedBack = JSON.stringify(response.data, null, '\t')
+            }, function(response) {
+                console.log("ERROR: " + response)
+                $scope.executionFeedBack = JSON.stringify(response.data, null, '\t')
+            });
+    }
+
     getAndSet('components')
 
   });
