@@ -6,7 +6,7 @@
  * # MainCtrl
  * Controller of yapp
  */
-angular.module('yapp')
+angular.module('wollok-showcase-app')
   .controller('DashboardCtrl', function($scope, $state, $http) {
     $scope.$state = $state;
 
