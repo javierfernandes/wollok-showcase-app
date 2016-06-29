@@ -22,7 +22,8 @@ module.exports = function(config) {
       '../public/scripts/lib/angular-ui-ace/ui-ace.js',
       '../public/scripts/lib/angular-loading-bar/build/loading-bar.js',
       // endbower
-      '../app/scripts/**/*.js',
+      '../public/scripts/*.js',
+      '../public/scripts/controllers/*.js',
       //'../test/mock/**/*.js',
       '../test/spec/**/*.js'
     ],
