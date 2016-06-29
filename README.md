@@ -28,7 +28,7 @@ Then fetch the wollok examples
 
 ```bash
 gulp fetch-examples
-``
+```
 
 That will create a folder named "data" with the wollok example files.
 
