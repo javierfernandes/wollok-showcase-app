@@ -1,1 +1,1 @@
-web: npm run gulp fetch-examples ; npm start
+web: npm run fetch-examples ; npm start
