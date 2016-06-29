@@ -8,19 +8,32 @@ var $ = require('gulp-load-plugins')();
 var git = require('gulp-git');
 var clean = require('gulp-clean');
 var runSequence = require('run-sequence');
+const minimist = require('minimist')
 
+
+const options = minimist(process.argv.slice(2))
 
 // get examples files from github
 
 gulp.task('clone-examples', function(cb) {
-  git.clone('https://github.com/uqbar-project/wollok.git', {args: __dirname + '/gulp-data'}, function(err) {
+  git.clone('https://github.com/uqbar-project/wollok.git', {args: __dirname + '/datatmp'}, function(err) {
       console.log("Finished cloning")
       cb(err)
   });
 });
 
+gulp.task('checkout-examples', function(cb) {
+
+  var branchName = options.branch || 'master'
+  console.log("Checking out " + branchName)
+  git.checkout(branchName, {cwd: __dirname + '/datatmp'}, function (err) {
+    console.log("Checked out " + branchName)
+    cb(err)
+  });
+});
+
 gulp.task('copy-examples', function() {
-  return gulp.src('gulp-data/wollok-tests/**')
+  return gulp.src('datatmp/wollok-tests/**')
       .pipe(gulp.dest('data'))
 })
 
@@ -30,7 +43,7 @@ gulp.task('clean-cloned-examples', function() {
 })
 
 gulp.task('fetch-examples', function(done) {
-  runSequence('clone-examples', 'copy-examples', 'clean-cloned-examples', function() {
+  runSequence('clone-examples', 'checkout-examples', 'copy-examples', 'clean-cloned-examples', function() {
     done();
   });
 })

@@ -2,7 +2,7 @@
 
 describe('Controller: MainCtrl', function() {
   // load the controller's module
-  beforeEach(module('yapp'));
+  beforeEach(module('wollok-showcase-app'));
 
   var MainCtrl;
   var scope;
@@ -10,12 +10,12 @@ describe('Controller: MainCtrl', function() {
   // Initialize the controller and a mock scope
   beforeEach(inject(function($controller, $rootScope) {
     scope = $rootScope.$new();
-    MainCtrl = $controller('MainCtrl', {
+    MainCtrl = $controller('DashboardCtrl', {
       $scope: scope
     });
   }));
 
   it('should attach a list of tasks', function() {
-    expect(scope.tasks.length).toBe(8);
+    expect(scope.pageSize).toBe(4);
   });
 });

@@ -6,13 +6,18 @@
 		<div class="container">
 			<h1>Welcome!</h1>
 			<p>
-			This site is intented to showcase the Wollok Programming Language with code examples.
-			As there are several versions of wollok here you will find a list of branches to choose from.
+			This site is intented to showcase the <a href="https://github.com/uqbar-project/wollok">Wollok Programming Language</a> with code examples.
+			</p>
+			<p>
+				Below you will find the list of examples to explore.
+				Each component has a list of files as sample code.
 			</p>
 			<br /><br />
-			<p>
-				<a class="btn btn-primary btn-lg btn-outline btn-rounded">Learn more</a>
-			</p>
+			<ul>
+				<li ng-repeat="component in components">
+					<a ng-click="showComponent(component)">{{component.title}} <span ng-show="component == selectedComponent" ng-class="sr-only">(current)</span></a>
+				</li>
+			</ul>
 		</div>
 		</div>
 
@@ -65,15 +70,8 @@
 					  	</div>
 					</div>
 					<div class="col-md-2">
-						<div class="list-group example-files-list">
-						  <a href="#" class="list-group-item active">File0.wlk</a>
-						  <a href="#" class="list-group-item">File1.wlk</a>
-						  <a href="#" class="list-group-item">File2.wlk</a>
-						  <a href="#" class="list-group-item">File3.wlk</a>
-						  <a href="#" class="list-group-item">File4.wlk</a>
-						</div>
 					  	<div class="btn-group-vertical" role="group" aria-label="..." style="bottom: 0; right:0">
-						  <button ng-click="runFile()" type="button" class="btn btn-primary"><span class="glyphicon glyphicon-play"/></button>
+						  <button ng-click="runFile()" ng-disabled="!selectedFile" type="button" class="btn btn-primary"><span class="glyphicon glyphicon-play"/></button>
 						</div>
 				  	</div>
 			  	</div>

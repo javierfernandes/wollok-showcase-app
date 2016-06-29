@@ -2,14 +2,10 @@
 
 /**
  * @ngdoc overview
- * @name yapp
- * @description
- * # yapp
- *
  * Main module of the application.
  */
 angular
-  .module('yapp', [
+  .module('wollok-showcase-app', [
     'ui.router',
     'ngAnimate',
     'ui.ace',
@@ -29,7 +25,8 @@ angular
   .config(function($stateProvider, $urlRouterProvider) {
 
     $urlRouterProvider.when('/dashboard', '/dashboard/overview');
-    $urlRouterProvider.otherwise('/login');
+    //$urlRouterProvider.otherwise('/login');
+    $urlRouterProvider.otherwise('/dashboard');
 
     $stateProvider
       .state('base', {

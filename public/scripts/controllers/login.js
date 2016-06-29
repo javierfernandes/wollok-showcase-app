@@ -2,19 +2,12 @@
 
 /**
  * @ngdoc function
- * @name yapp.controller:MainCtrl
- * @description
- * # MainCtrl
- * Controller of yapp
+ * @name wollok-showcase-app.controller:MainCtrl
  */
-angular.module('yapp')
+angular.module('wollok-showcase-app')
   .controller('LoginCtrl', function($scope, $location) {
-
     $scope.submit = function() {
-
       $location.path('/dashboard');
-
       return false;
     }
-
   });
