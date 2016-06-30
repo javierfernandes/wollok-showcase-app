@@ -1,1 +1,1 @@
-web: npm run fetch-examples ; npm run build ; npm start
+web: gulp fetch-examples --branch=organizing-examples ; npm run build ; npm start
