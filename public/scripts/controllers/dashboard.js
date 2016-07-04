@@ -70,15 +70,40 @@ angular.module('wollok-showcase-app')
     };
 
     $scope.runFile = function() {
-        console.log("Running file !")
+        $scope.running = true
         $http.get('/api/file/run/' + $scope.selectedFile.fqn)
             .then(function(response) {
-                console.log("Got response: " + response)
+                $scope.running = false
+                $scope.executionResult = response.data
+                $scope.processMarkers()
                 $scope.executionFeedBack = JSON.stringify(response.data, null, '\t')
             }, function(response) {
+                $scope.running = false
                 console.log("ERROR: " + response)
                 $scope.executionFeedBack = JSON.stringify(response.data, null, '\t')
             });
+    }
+
+    $scope.processMarkers = function() {
+        var Range = ace.require("ace/range").Range
+        if ($scope.executionResult && $scope.executionResult.compilation && $scope.executionResult.compilation.issues) {
+            var annotations = []
+            $scope.executionResult.compilation.issues.forEach(function(issue) {
+                if (issue.lineNumber) {
+                    annotations.push({
+                        row: issue.lineNumber - 1,
+                        column: 0,
+                        text: issue.message,
+                        type: issue.severity.toLowerCase()  //error, warning and information
+                    });
+                }
+            })
+            $scope.codeEditor.getSession().setAnnotations(annotations)
+        }
+    }
+      
+    $scope.codeEditorLoaded = function(_editor) {
+        $scope.codeEditor = _editor
     }
 
     getAndSet('components')

@@ -1,0 +1,52 @@
+<div class="workspace">
+	<div>
+		<h1>Try wollok !</h1>
+	</div>
+
+	<div class="row">
+		<div class="col-md-8">
+			<div class="wollokEditor" ui-ace="{ mode: 'wollok', theme: 'eclipse', onLoad : codeEditorLoaded }"
+					ng-model="programContent">
+			</div>
+		</div>
+		<div class="col-md-4">
+			<div class="btn-group-vertical" role="group" aria-label="..." style="bottom: 0; right:0">
+				<button ng-click="runFile()" ng-disabled="!programContent || running" type="button" class="btn btn-primary"><span class="glyphicon glyphicon-play"/></button>
+			</div>
+
+			<div ng-hide="!executionResult || !executionResult.compilation || !executionResult.compilation.issues">
+				<h3>Compilation</h3>
+				<div>
+					<ul class="alert alert-danger compilationErrors" role="alert">
+						<li ng-repeat="issue in executionResult.compilation.issues">
+							<span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+							<span>{{issue.message}}</span>
+						</li>
+					</ul>
+				</div>
+			</div>
+			<div ng-hide="!executionResult || !executionResult.runtimeErrors">
+				<h3>Runtime</h3>
+				<div>
+					<ul class="alert alert-danger compilationErrors" role="alert">
+						<li>
+							<span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+							<pre>{{executionResult.runtimeErrors}}</pre>
+						</li>
+					</ul>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="row">
+		<div id="outputConsole" class="col-md-8">
+			<h3>Output</h3>
+			<div
+					ui-ace="{ mode:'json', theme:'eclipse', useWrapMode: true, showLineNumbers:false, showGutter:false }"
+					ng-model="executionFeedBack"
+					readonly="true">
+			</div>
+		</div>
+	</div>
+
+</div>

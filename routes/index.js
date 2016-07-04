@@ -93,6 +93,24 @@ router.get('/api/file/run/:id', function(req, res, next) {
 	});
 })
 
+router.post('/api/run', function(req, res, next) {
+	var data = req.body.program
+	request({
+			uri: 'http://server.wollok.org:8080/run',
+			method: 'POST',
+			preambleCRLF: true,
+			postambleCRLF: true,
+			body: data
+		},
+		function (error, response, body) {
+			if (error)
+				res.status(500).send(error.toString())
+			else
+				res.status(response.statusCode).send(body)
+		}
+	);
+})
+
 router.get('/', function(req, res, next) {
   res.render('index', { title: 'Wollok ShowCase' });
 });

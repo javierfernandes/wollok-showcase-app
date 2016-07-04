@@ -12,9 +12,15 @@
       </div>
 
 
+      <span><h2>Write Code</h2></span>
+      <ul class="nav nav-sidebar">
+          <li><a ui-sref="writeProgram" href="#">Program</a></li>
+      </ul>
+
+      <span><h2>Examples</h2></span>
       <ul class="nav nav-sidebar">
         <li ng-repeat="component in components" ng-class="{ active: component == selectedComponent }" >
-          <a ng-click="showComponent(component)">{{component.title}} <span ng-show="component == selectedComponent" ng-class="sr-only">(current)</span></a>
+          <a ng-click="showComponent(component)" ng-disabled="component == selectedComponent">{{component.title}} <span ng-show="component == selectedComponent" ng-class="sr-only">(current)</span></a>
         </li>
       </ul>
 

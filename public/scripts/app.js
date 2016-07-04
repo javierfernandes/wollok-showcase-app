@@ -25,7 +25,6 @@ angular
   .config(function($stateProvider, $urlRouterProvider) {
 
     $urlRouterProvider.when('/dashboard', '/dashboard/overview');
-    //$urlRouterProvider.otherwise('/login');
     $urlRouterProvider.otherwise('/dashboard');
 
     $stateProvider
@@ -51,7 +50,12 @@ angular
             parent: 'dashboard',
             templateUrl: 'views/dashboard/overview.html'
         })
-
+        .state('writeProgram', {
+            url: '/writeProgram',
+            parent: 'dashboard',
+            templateUrl: 'views/dashboard/program.html',
+            controller: 'WorkspaceCtrl'
+        })
 
   });
 

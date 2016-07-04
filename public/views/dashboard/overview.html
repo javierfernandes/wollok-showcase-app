@@ -64,21 +64,35 @@
 				<div class="row">				
 					<div class="col-md-10 working-with-code">
 						<div 
-							ui-ace="{ mode: 'wollok', theme: 'eclipse' }"
+							ui-ace="{ mode: 'wollok', theme: 'eclipse', onLoad : codeEditorLoaded }"
 							ng-model="currentFileContent"
-							readonly="true">
+							readonly="true"
+							>
 					  	</div>
 					</div>
 					<div class="col-md-2">
 					  	<div class="btn-group-vertical" role="group" aria-label="..." style="bottom: 0; right:0">
-						  <button ng-click="runFile()" ng-disabled="!selectedFile" type="button" class="btn btn-primary"><span class="glyphicon glyphicon-play"/></button>
+						  <button ng-click="runFile()" ng-disabled="!selectedFile || running" type="button" class="btn btn-primary"><span class="glyphicon glyphicon-play"/></button>
 						</div>
 				  	</div>
 			  	</div>
 
 			  	<div class="row">
+
+					<div>
+						<h3>Compilation</h3>
+						<div ng-disabled="!executionResult || !executionResult.compilation || !executionResult.compilation.issues" class="alert alert-danger" role="alert">
+							<ul>
+								<li ng-repeat="issue in executionResult.compilation.issues">
+									<span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+									<span>{{issue.message}}</span>
+								</li>
+							</ul>
+						</div>
+					</div>
+
 				  	<div id="output-console" class="col-md-10">
-				  		Output:
+				  		<h3>Output</h3>
 						<div
 								ui-ace="{ mode:'json', theme:'eclipse', useWrapMode: true, showLineNumbers:false, showGutter:false }"
 								ng-model="executionFeedBack"
